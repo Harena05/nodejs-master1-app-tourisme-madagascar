@@ -2,11 +2,10 @@
 const User = require('../models/user.model');
 
 exports.register = async (req, res) => {
-  const data = req.body
   try {
     const { username, password } = req.body;
-    const newUserPassword = password;
-    const newUser = new User({ username, password: newUserPassword });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
     res.status(201).json({ message: 'Registration successful.' });
   } catch (error) {
@@ -34,4 +33,20 @@ exports.login = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'An error occurred during login.' });
   }
+};
+
+exports.allAccess = (req, res) => {
+  res.status(200).send("Public Content.");
+};
+
+exports.userBoard = (req, res) => {
+  res.status(200).send("User Content.");
+};
+
+exports.adminBoard = (req, res) => {
+  res.status(200).send("Admin Content.");
+};
+
+exports.moderatorBoard = (req, res) => {
+  res.status(200).send("Moderator Content.");
 };
