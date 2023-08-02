@@ -1,6 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
 const userRoutes = require('./routes/user.routes');
+const roleModel = require("./models/role.model");
+const authRoutes = require('./routes/auth.routes')
+
 const app = express();
 
 app.use(express.json());
@@ -19,11 +23,10 @@ require('dotenv').config();
 
 // Récupérer les informations de connexion en fonction de l'environnement
 const dbURI = process.env.STATUS === 'prod'
-  ? process.env.DB_CONNECTION_PROD
-  : process.env.DB_CONNECTION_DEV;
+  ? process.env.DB_CONNECTION_DEV
+  : process.env.DB_CONNECTION_PROD;
 
-  const db = require("./app/models");
-  const Role = db.role;
+  // const db = require("./app/models/db");
 // Connexion à MongoDB
 // const dbURI = `mongodb://${dbUser}:${dbPass}@${dbHost}/${dbName}`;
 mongoose.connect(dbURI, {
@@ -38,15 +41,17 @@ mongoose.connect(dbURI, {
 
 // Le reste de votre configuration Express et de vos routes...
 
+
 app.use('/user', userRoutes);
-require('./app/routes/auth.routes')(app);
-require('./app/routes/user.routes')(app);
+app.use('/api/auth',authRoutes);
+// require('./app/routes/auth.routes')(app);
+// require('./app/routes/user.routes')(app);
 
 
 function initial() {
-  Role.estimatedDocumentCount((err, count) => {
+  roleModel.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
-      new Role({
+      new roleModel({
         name: "user"
       }).save(err => {
         if (err) {
@@ -56,7 +61,7 @@ function initial() {
         console.log("added 'user' to roles collection");
       });
 
-      new Role({
+      new roleModel({
         name: "moderator"
       }).save(err => {
         if (err) {
@@ -66,7 +71,7 @@ function initial() {
         console.log("added 'moderator' to roles collection");
       });
 
-      new Role({
+      new roleModel({
         name: "admin"
       }).save(err => {
         if (err) {
