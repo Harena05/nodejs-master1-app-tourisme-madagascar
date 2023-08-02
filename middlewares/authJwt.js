@@ -24,71 +24,56 @@ verifyToken = (req, res, next) => {
             });
 };
 
-isAdmin = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
-    Role.find(
-      {
-        _id: { $in: user.roles },
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "admin") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Require Admin Role!" });
-        return;
+const isAdmin = (req, res, next) => {
+  User.findById(req.userId)
+    .exec()
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'User not found.' });
       }
-    );
-  });
+
+      return Role.find({ _id: { $in: user.roles } }).exec();
+    })
+    .then((roles) => {
+      if (!roles.some((role) => role.rolename === 'admin')) {
+        return res.status(403).send({ message: 'Require Admin Role!' });
+      }
+
+      next();
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
 };
 
-isModerator = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
 
-    Role.find(
-      {
-        _id: { $in: user.roles },
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === "moderator") {
-            next();
-            return;
-          }
-        }
-
-        res.status(403).send({ message: "Require Moderator Role!" });
-        return;
+const isModerator = (req, res, next) => {
+  User.findById(req.userId)
+    .exec()
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'User not found.' });
       }
-    );
-  });
+
+      return Role.find({ _id: { $in: user.roles } }).exec();
+    })
+    .then((roles) => {
+      if (!roles.some((role) => role.rolename === 'moderator')) {
+        return res.status(403).send({ message: 'Require Moderator Role!' });
+      }
+
+      next();
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
 };
+
 
 const authJwt = {
   verifyToken,
   isAdmin,
   isModerator,
 };
+
 module.exports = authJwt;

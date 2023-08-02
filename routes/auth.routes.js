@@ -1,8 +1,12 @@
-const { verifySignUp } = require("../middlewares/verifySingUp");
+const express = require('express');
+const verifySignUp = require("../middlewares/verifySingUp");
 const authController = require("../controllers/auth.controller");
+// const authController = require('../controllers/user.controller');
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
+const router = express.Router();
+
+// module.exports = function(app) {
+  router.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
       "Origin, Content-Type, Accept"
@@ -10,7 +14,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post(
+  router.post(
     "/signup",
     [
       verifySignUp.checkDuplicateUsernameOrEmail,
@@ -19,7 +23,9 @@ module.exports = function(app) {
     authController.signup
   );
 
-  app.post("/signin", authController.signin);
+  router.post("/signin", authController.signin);
 
-  app.post("/signout", authController.signout);
-};
+  router.post("/signout", authController.signout);
+
+  module.exports = router;
+// };

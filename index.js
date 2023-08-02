@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const userRoutes = require('./routes/user.routes');
 const roleModel = require("./models/role.model");
-const authRoutes = require('./routes/auth.routes')
+const authRoutes = require('./routes/auth.routes');
 
 const app = express();
 
@@ -23,8 +23,8 @@ require('dotenv').config();
 
 // Récupérer les informations de connexion en fonction de l'environnement
 const dbURI = process.env.STATUS === 'prod'
-  ? process.env.DB_CONNECTION_DEV
-  : process.env.DB_CONNECTION_PROD;
+  ? process.env.DB_CONNECTION_PROD
+  : process.env.DB_CONNECTION_DEV;
 
   // const db = require("./app/models/db");
 // Connexion à MongoDB
@@ -43,44 +43,63 @@ mongoose.connect(dbURI, {
 
 
 app.use('/user', userRoutes);
-app.use('/api/auth',authRoutes);
+app.use('/auth',authRoutes);
 // require('./app/routes/auth.routes')(app);
 // require('./app/routes/user.routes')(app);
 
 
 function initial() {
-  roleModel.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
+  roleModel.estimatedDocumentCount().then((count)=>{
+    if(count ===0){
       new roleModel({
-        name: "user"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
+        rolename: "user"
+      }).save().then(()=>{
         console.log("added 'user' to roles collection");
+      }).catch((err)=>{
+        console.log("error", err);
       });
 
       new roleModel({
-        name: "moderator"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
+        rolename: "moderator"
+      }).save().then(()=>{
         console.log("added 'moderator' to roles collection");
+      }).catch((err)=>{
+        console.log("error", err);
       });
 
       new roleModel({
-        name: "admin"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
+        rolename: "admin"
+      }).save().then(()=>{
         console.log("added 'admin' to roles collection");
+      }).catch((err)=>{
+        console.log("error", err);
       });
     }
+  })
+  .catch((err)=>{
+    new roleModel({
+      rolename: "user"
+    }).save().then(()=>{
+      console.log("added 'user' to roles collection");
+    }).catch((err)=>{
+      console.log("error", err);
+    });
+
+    new roleModel({
+      rolename: "moderator"
+    }).save().then(()=>{
+      console.log("added 'moderator' to roles collection");
+    }).catch((err)=>{
+      console.log("error", err);
+    });
+
+    new roleModel({
+      rolename: "admin"
+    }).save().then(()=>{
+      console.log("added 'admin' to roles collection");
+    }).catch((err)=>{
+      console.log("error", err);
+    });
   });
 }
 
