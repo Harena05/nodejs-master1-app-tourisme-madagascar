@@ -6,10 +6,10 @@ database
         email:tehado5389@naymedia.com
         mdp:temp123456
     
-    netlify    
-        email:tehado5389@naymedia.com
-        mdp:VruW''c38-QdKt9
-
     db login
         user:user   
         mdp:user123456
+
+node app:
+host: https://z4e020235-z0d3a5635-gtw.zb20e5e48.qovery.fr
+

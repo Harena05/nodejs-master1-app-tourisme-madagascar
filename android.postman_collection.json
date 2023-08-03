@@ -23,12 +23,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/auth/signup",
-					"protocol": "http",
+					"raw": "{{base_url}}/auth/signup",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3000",
 					"path": [
 						"auth",
 						"signup"
@@ -52,12 +50,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/auth/signin",
-					"protocol": "http",
+					"raw": "{{base_url}}/auth/signin",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3000",
 					"path": [
 						"auth",
 						"signin"
@@ -72,12 +68,10 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/auth/signout",
-					"protocol": "http",
+					"raw": "{{base_url}}/auth/signout",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3000",
 					"path": [
 						"auth",
 						"signout"
@@ -92,12 +86,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/user/mod",
-					"protocol": "http",
+					"raw": "{{base_url}}/user/mod",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3000",
 					"path": [
 						"user",
 						"mod"
@@ -112,12 +104,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/user/user",
-					"protocol": "http",
+					"raw": "{{base_url}}/user/user",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3000",
 					"path": [
 						"user",
 						"user"
@@ -132,12 +122,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/user/all",
-					"protocol": "http",
+					"raw": "{{base_url}}/user/all",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3000",
 					"path": [
 						"user",
 						"all"
@@ -152,12 +140,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/user/admin",
-					"protocol": "http",
+					"raw": "{{base_url}}/user/admin",
 					"host": [
-						"localhost"
+						"{{base_url}}"
 					],
-					"port": "3000",
 					"path": [
 						"user",
 						"admin"
@@ -165,6 +151,33 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "default"
 		}
 	]
 }
