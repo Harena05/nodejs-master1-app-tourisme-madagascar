@@ -1,7 +1,8 @@
-
+const express = require('express');
+const path = require('path');
 
 splache_screen = () => {
-    return "welcome";
+    return express.static(path.join(__dirname,'public'));
 };
 const screenServices ={
   splache_screen,  

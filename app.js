@@ -5,6 +5,7 @@ const userRoutes = require('./routes/user.routes');
 const roleModel = require("./models/role.model");
 const authRoutes = require('./routes/auth.routes');
 const screenRoutes = require('./routes/screen.routes');
+const path = require('path');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(
     httpOnly: true
   })
 );
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Charger les variables d'environnement
 require('dotenv').config();
