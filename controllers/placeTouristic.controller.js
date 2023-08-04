@@ -9,10 +9,9 @@ var bcrypt = require("bcryptjs");
 const placeTouristicModel = require("../models/placeTouristic.model");
 
 exports.save = async (req, res) => {
-  const user = new PlaceTouristic({
+  const place = new PlaceTouristic({
     placeName: req.body.placeName,
     description: req.body.description,
-    types: req.body.types,
     types: req.body.types,
     images: req.body.images,
     latitude: req.body.latitude,
@@ -21,14 +20,14 @@ exports.save = async (req, res) => {
 
   place.save()
     .then(() => {
-        return res.send({ message: 'Place was registered successfully!' });
+        return res.status(200).send({ message: 'Place was registered successfully!' });
     })
     .catch((err) => {
         return res.status(500).send({ message: err.message });
     });
 };
 
-exports.all = async (res,req) =>{
+exports.all = async (req,res) =>{
   placeTouristicModel.find().then((result)=>{
     return res.status(200).send(result);
   }).catch((err)=>{
@@ -36,8 +35,9 @@ exports.all = async (res,req) =>{
   });
 };
 
-exports.findeById = async (res,req) => {
-    placeTouristicModel.findById(req.body.id).then((result)=>{
+exports.findeById = async (req,res) => {
+    const id = req.params.id;
+    placeTouristicModel.findById(id).then((result)=>{
         if(!result){
             return res.status(404).send({ message: 'Place Not found.' });
         }
@@ -47,12 +47,35 @@ exports.findeById = async (res,req) => {
     });
 };
 
-exports.update = async (res,req) => {
-    placeTouristicModel.findByIdAndUpdate(req.body.id).then((result)=>{
+exports.update = async (req,res) => {
+
+    const id = req.params.id;
+    const {placeName ,description,types ,images,latitude,longitude}= req.body;
+
+    placeTouristicModel.findByIdAndUpdate(id,{
+        placeName,
+        description,
+        types,
+        images,
+        latitude,
+        longitude
+    }).then((result)=>{
         if(!result){
             return res.status(404).send({ message: 'Place Not found.' });
         }
-        return res.status(200).send(result);
+        return res.status(200).send({ message:"update successfuly"});
+    }).catch((err)=>{
+        return res.status(500).send({ message: err.message });
+    });
+};
+
+
+exports.delete = async (req,res) => {
+    placeTouristicModel.findByIdAndRemove(req.body.id).then((result)=>{
+        if(!result){
+            return res.status(404).send({ message: 'Place Not found.' });
+        }
+        return res.status(200).send({ message:"Place deleted"});
     }).catch((err)=>{
         return res.status(500).send({ message: err.message });
     });

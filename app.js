@@ -6,6 +6,7 @@ const roleModel = require("./models/role.model");
 const authRoutes = require('./routes/auth.routes');
 const screenRoutes = require('./routes/screen.routes');
 const path = require('path');
+const placeTouristicRoutes = require('./routes/placeTouristic.routes');
 
 const app = express();
 
@@ -48,6 +49,8 @@ mongoose.connect(dbURI, {
 app.use('/user', userRoutes);
 app.use('/auth',authRoutes);
 app.use('/screen',screenRoutes);
+app.use('/place',placeTouristicRoutes);
+
 // require('./app/routes/auth.routes')(app);
 // require('./app/routes/user.routes')(app);
 
