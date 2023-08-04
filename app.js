@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session');
 const userRoutes = require('./routes/user.routes');
 const roleModel = require("./models/role.model");
 const authRoutes = require('./routes/auth.routes');
+const screenRoutes = require('./routes/screen.routes');
 
 const app = express();
 
@@ -44,6 +45,7 @@ mongoose.connect(dbURI, {
 
 app.use('/user', userRoutes);
 app.use('/auth',authRoutes);
+app.use('/screen',screenRoutes);
 // require('./app/routes/auth.routes')(app);
 // require('./app/routes/user.routes')(app);
 
