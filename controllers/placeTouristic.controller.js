@@ -3,6 +3,7 @@ const db = require("../models");
 const PlaceTouristic =require("../models/placeTouristic.model")
 const User = db.user;
 const Role = db.role;
+const notifServices = require("../services/notif.services")
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -20,7 +21,13 @@ exports.save = async (req, res) => {
 
   place.save()
     .then(() => {
-        return res.status(200).send({ message: 'Place was registered successfully!' });
+        User.find().then((users)=>{
+            const fcmTokens = users.map((user) => user.fcmToken);
+            // notifServices.sendNotificationToUsers(fcmTokens,"NEW Place To Visite",'"${placeName}" is our new place and you can visite it now');
+            return res.status(200).send({ message: 'Place was registered successfully!' });
+        }).catch((err)=>{
+            return res.status(500).send({ message: err.message });
+        })
     })
     .catch((err) => {
         return res.status(500).send({ message: err.message });

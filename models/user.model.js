@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
   roles:[{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role"
-  }]
+  }],
+  fcmToken: { type: String}
 
 });
 
